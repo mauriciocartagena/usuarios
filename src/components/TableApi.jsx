@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Table, Button, Modal, Form } from "react-bootstrap";
 import useInitialState from "../utils/hooks/useInitalState";
 import userDelete from "../utils/hooks/delete";
 import userUpdate from "../utils/hooks/update";
+import userInsert from "../utils/hooks/Insert";
 const API = "http://localhost:3004/";
 
 function TableApi() {
   const initialState = useInitialState(API);
   const [stado, setStado] = useState(false);
   const [idUser, setIdUser] = useState(null);
-  const [nombre, setNombre] = useState("");
+  const [nombre, setNombre] = useState(null);
   const [apePaterno, setApePaterno] = useState(null);
   const [apeMaterno, setApeMaterno] = useState(null);
   const [ci, setCi] = useState(null);
@@ -17,8 +18,63 @@ function TableApi() {
   const [direccion, setDireccion] = useState(null);
 
   const eliminar = (id) => userDelete(id);
-  const actualizar = (id_user, name, lastName, secondName, ci, gender, city) =>
+  const activo = ({ valor }) => {
+    setStado(valor);
+  };
+  const insert = (name, lastName, secondName, ci, gender, city, { valor }) =>
+    userInsert(name, lastName, secondName, ci, gender, city);
+  function actualizar(
+    id_user,
+    name,
+    lastName,
+    secondName,
+    ci,
+    gender,
+    city,
+    { valor }
+  ) {
+    actualizarUsers(id_user, name, lastName, secondName, ci, gender, city);
+    setStado(valor);
+    setIdUser(null);
+    setNombre(null);
+    setApePaterno(null);
+    setApeMaterno(null);
+    setCi(null);
+    setGenero(null);
+    setDireccion(null);
+  }
+
+  const close = (
+    id_user,
+    name,
+    lastName,
+    secondName,
+    ci,
+    gender,
+    city,
+    { valor }
+  ) => {
+    setIdUser(null);
+    setNombre(null);
+    setApePaterno(null);
+    setApeMaterno(null);
+    setCi(null);
+    setGenero(null);
+    setDireccion(null);
+    setStado(valor);
+  };
+  const actualizarUsers = (
+    id_user,
+    name,
+    lastName,
+    secondName,
+    ci,
+    gender,
+    city
+  ) => {
     userUpdate(id_user, name, lastName, secondName, ci, gender, city);
+  };
+
   function modificar(
     id,
     { valor },
@@ -43,6 +99,9 @@ function TableApi() {
     <h1>Loading....</h1>
   ) : (
     <>
+      <Button variant="primary" onClick={() => activo({ valor: true })}>
+        Agregar
+      </Button>
       <Table striped bordered hover variant="dark">
         <thead>
           <tr>
@@ -112,6 +171,7 @@ function TableApi() {
                   <Form.Control
                     type="text"
                     value={nombre}
+                    placeholder="Nombre"
                     onInput={(e) => setNombre(e.target.value)}
                   />
                 </Form.Group>
@@ -166,12 +226,38 @@ function TableApi() {
                   <Button
                     variant="secondary"
                     onClick={() => {
-                      setStado(false);
+                      close(
+                        idUser,
+                        nombre,
+                        apePaterno,
+                        apeMaterno,
+                        ci,
+                        genero,
+                        direccion,
+                        { valor: false }
+                      );
                     }}
                   >
                     Close
                   </Button>
-                  {
+                  {idUser === null ? (
+                    <Button
+                      variant="primary"
+                      onClick={() =>
+                        insert(
+                          nombre,
+                          apePaterno,
+                          apeMaterno,
+                          ci,
+                          genero,
+                          direccion,
+                          { valor: false }
+                        )
+                      }
+                    >
+                      {idUser === null ? "Agregar" : "Modificar"}
+                    </Button>
+                  ) : (
                     <Button
                       variant="primary"
                       onClick={() =>
@@ -182,13 +268,14 @@ function TableApi() {
                           apeMaterno,
                           ci,
                           genero,
-                          direccion
+                          direccion,
+                          { valor: false }
                         )
                       }
                     >
-                      Modificar
+                      {idUser === null ? "Agregar" : "Modificar"}
                     </Button>
-                  }
+                  )}
                 </Modal.Footer>
               </Form>
             </Modal.Body>

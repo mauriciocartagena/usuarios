@@ -2,11 +2,15 @@ import { useState, useEffect } from "react";
 
 const useInitialState = (API) => {
   const [user, setUser] = useState({ usuarios: [] });
-  //sacar datos de la api Custom Hoock
+
+  // empty array as second argument equivalent to componentDidMount
   useEffect(() => {
-    fetch(API)
-      .then((response) => response.json())
-      .then((data) => setUser(data));
+    async function fetchData() {
+      const response = await fetch(API);
+      const json = await response.json();
+      setUser(json);
+    }
+    fetchData();
   }, [API]);
 
   return user;
