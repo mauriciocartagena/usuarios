@@ -5,11 +5,11 @@ const PORT = process.env.PORT || 3004;
 const app = express();
 
 var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "users",
-  socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
+  host: "",
+  user: "",
+  password: "",
+  database: "",
+  // socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
 });
 
 connection.connect(function (err) {

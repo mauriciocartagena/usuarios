@@ -2,7 +2,12 @@ const userDelete = (id_usuario) => {
   var requestOptions = {
     method: "DELETE",
   };
-  fetch("http://localhost:3004/usuario/" + id_usuario + "", requestOptions)
+  fetch(
+    "https://heroku-usuarios-api.herokuapp.com/usuarios/delete/" +
+      id_usuario +
+      "",
+    requestOptions
+  )
     .then(() => {
       console.log("sucess");
     })

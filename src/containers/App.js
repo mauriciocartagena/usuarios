@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 class App extends Component {
   render() {
     return (
-      <Container fluid>
+      <Container fluid="lg">
         <h1 style={{ textAlign: "center" }}>Usuarios</h1>
         <TableApi></TableApi>
       </Container>

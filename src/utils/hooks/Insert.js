@@ -3,9 +3,8 @@ const userInsert = (name, lastName, secondName, ci, gender, city) => {
     method: "POST",
     redirect: "follow",
   };
-
   fetch(
-    "http://localhost:3004/api/usuarios/" +
+    "https://heroku-usuarios-api.herokuapp.com/usuarios/" +
       name +
       "/" +
       lastName +

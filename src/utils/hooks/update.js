@@ -5,7 +5,7 @@ const userUpdate = (id_user, name, lastName, secondName, ci, gender, city) => {
   };
 
   fetch(
-    "http://localhost:3004/update/" +
+    "https://heroku-usuarios-api.herokuapp.com/usuarios/update/" +
       id_user +
       "/" +
       name +
