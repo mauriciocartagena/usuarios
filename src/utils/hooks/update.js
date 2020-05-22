@@ -1,25 +1,33 @@
-const userUpdate = (id_user, name, lastName, secondName, ci, gender, city) => {
+const userUpdate = (
+  id,
+  nombre,
+  apellido_paterno,
+  apellido_materno,
+  ci,
+  genero,
+  direccion
+) => {
   var requestOptions = {
     method: "PUT",
     redirect: "follow",
   };
 
   fetch(
-    "https://heroku-usuarios-api.herokuapp.com/usuarios/update/" +
-      id_user +
-      "/" +
-      name +
-      "/" +
-      lastName +
-      "/" +
-      secondName +
-      "/" +
+    "https://9nlr2dh5oh.execute-api.us-east-2.amazonaws.com/default/aws-update?id=" +
+      id +
+      "&nombre=" +
+      nombre +
+      "&apellido_paterno=" +
+      apellido_paterno +
+      "&apellido_materno=" +
+      apellido_materno +
+      "&ci=" +
       ci +
-      "/" +
-      gender +
-      "/" +
-      city +
-      "/",
+      "&genero=" +
+      genero +
+      "&direccion=" +
+      direccion +
+      "",
     requestOptions
   )
     .then((response) => response.text())

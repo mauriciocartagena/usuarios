@@ -18,16 +18,20 @@ class TableApi extends Component {
       apellido_paterno: "",
       apellido_materno: "",
       ci: "",
-      genero: "",
+      genero: "Masculino",
       direccion: "",
     };
   }
+
   componentDidMount() {
-    fetch("https://heroku-usuarios-api.herokuapp.com/usuarios")
+    fetch(
+      "https://te7yfcfogj.execute-api.us-east-2.amazonaws.com/default/apiRest"
+    )
       .then((response) => {
         return response.json();
       })
       .then((empleados) => {
+        console.log(empleados);
         this.setState({ usuarios: empleados });
       });
   }

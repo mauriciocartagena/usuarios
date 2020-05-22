@@ -3,7 +3,7 @@ const userDelete = (id_usuario) => {
     method: "DELETE",
   };
   fetch(
-    "https://heroku-usuarios-api.herokuapp.com/usuarios/delete/" +
+    " https://xoxluxwgqh.execute-api.us-east-2.amazonaws.com/default/aws-delete?id=" +
       id_usuario +
       "",
     requestOptions
