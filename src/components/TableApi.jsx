@@ -1,10 +1,5 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Form, Container } from "react-bootstrap";
-// import useInitialState from "../utils/hooks/useInitalState";
-import userDelete from "../utils/hooks/delete";
-import userUpdate from "../utils/hooks/update";
-import userInsert from "../utils/hooks/Insert";
-// const API = "https://heroku-usuarios-api.herokuapp.com/usuarios";
 
 class TableApi extends Component {
   constructor(props) {
@@ -12,18 +7,22 @@ class TableApi extends Component {
 
     this.state = {
       usuarios: [],
-      stado: false,
+      stado: null,
       id_usuario: 0,
       nombre: "",
       apellido_paterno: "",
       apellido_materno: "",
       ci: "",
-      genero: "Masculino",
+      genero: "Femenino",
       direccion: "",
     };
   }
 
   componentDidMount() {
+    this.loadUsers();
+  }
+
+  loadUsers() {
     fetch(
       "https://te7yfcfogj.execute-api.us-east-2.amazonaws.com/default/apiRest"
     )
@@ -31,12 +30,107 @@ class TableApi extends Component {
         return response.json();
       })
       .then((empleados) => {
-        console.log(empleados);
         this.setState({ usuarios: empleados });
       });
   }
 
   render() {
+    const userUpdate = (
+      id,
+      nombre,
+      apellido_paterno,
+      apellido_materno,
+      ci,
+      genero,
+      direccion
+    ) => {
+      var requestOptions = {
+        method: "PUT",
+        redirect: "follow",
+      };
+      fetch(
+        "https://9nlr2dh5oh.execute-api.us-east-2.amazonaws.com/default/aws-update?id=" +
+          id +
+          "&nombre=" +
+          nombre +
+          "&apellido_paterno=" +
+          apellido_paterno +
+          "&apellido_materno=" +
+          apellido_materno +
+          "&ci=" +
+          ci +
+          "&genero=" +
+          genero +
+          "&direccion=" +
+          direccion +
+          "",
+        requestOptions
+      )
+        .then(() => this.loadUsers())
+        .then(() =>
+          this.setState({
+            stado: false,
+            id_usuario: 0,
+            nombre: "",
+            apellido_paterno: "",
+            apellido_materno: "",
+            ci: "",
+            genero: "Femenino",
+            direccion: "",
+          })
+        )
+        .catch((error) => console.log("error", error));
+    };
+    const userDelete = (id_usuario) => {
+      var requestOptions = {
+        method: "DELETE",
+      };
+      fetch(
+        "https://xoxluxwgqh.execute-api.us-east-2.amazonaws.com/default/aws-delete?id=" +
+          id_usuario +
+          "",
+        requestOptions
+      )
+        .then(() => {
+          this.loadUsers();
+        })
+        .catch((error) => console.log("error", error));
+    };
+    const userInsert = (name, lastName, secondName, ci, gender, city) => {
+      var requestOptions = {
+        method: "POST",
+        redirect: "follow",
+      };
+      fetch(
+        "https://ws6lhtnaig.execute-api.us-east-2.amazonaws.com/default/aws-insert?nombre=" +
+          name +
+          "&apellido_paterno=" +
+          lastName +
+          "&apellido_materno=" +
+          secondName +
+          "&ci=" +
+          ci +
+          "&genero=" +
+          gender +
+          "&direccion=" +
+          city,
+        requestOptions
+      )
+        .then(() => this.loadUsers())
+        .then(() =>
+          this.setState({
+            stado: false,
+            id_usuario: 0,
+            nombre: "",
+            apellido_paterno: "",
+            apellido_materno: "",
+            ci: "",
+            genero: "Femenino",
+            direccion: "",
+          })
+        )
+        .catch((error) => console.log("error", error));
+    };
     return this.state.usuarios === 0 ? (
       <h1>Loading....</h1>
     ) : (
@@ -47,6 +141,7 @@ class TableApi extends Component {
         >
           Agregar
         </Button>
+
         <Table striped bordered responsive hover variant="dark">
           <thead>
             <tr>
@@ -105,10 +200,21 @@ class TableApi extends Component {
               ))}
           </tbody>
           {this.state.stado === true ? (
-            <Modal show={true}>
+            <Modal show={this.state.stado}>
               <Modal.Header
                 closeButton
-                onClick={() => this.setState({ stado: false })}
+                onClick={() =>
+                  this.setState({
+                    stado: false,
+                    id_usuario: 0,
+                    nombre: "",
+                    apellido_paterno: "",
+                    apellido_materno: "",
+                    ci: "",
+                    genero: "Femenino",
+                    direccion: "",
+                  })
+                }
               >
                 <Modal.Title>Modal heading</Modal.Title>
               </Modal.Header>
@@ -191,7 +297,7 @@ class TableApi extends Component {
                           apellido_paterno: "",
                           apellido_materno: "",
                           ci: "",
-                          genero: "",
+                          genero: "Femenino",
                           direccion: "",
                         });
                       }}
